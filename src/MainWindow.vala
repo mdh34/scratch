@@ -86,6 +86,7 @@ namespace Scratch {
         public const string ACTION_ZOOM_DEFAULT = "action_zoom_default";
         public const string ACTION_ZOOM_IN = "action_zoom_in";
         public const string ACTION_ZOOM_OUT = "action_zoom_out";
+        public const string ACTION_THEME = "action_theme";
 
         public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
 
@@ -117,7 +118,8 @@ namespace Scratch {
             { ACTION_QUIT, action_quit },
             { ACTION_ZOOM_DEFAULT, action_set_default_zoom },
             { ACTION_ZOOM_IN, action_zoom_in },
-            { ACTION_ZOOM_OUT, action_zoom_out}
+            { ACTION_ZOOM_OUT, action_zoom_out},
+            { ACTION_THEME, action_theme}
         };
 
         public MainWindow (Scratch.Application scratch_app) {
@@ -321,7 +323,16 @@ namespace Scratch {
             vp.pack2 (bottombar, false, false);
 
             add (vp);
+            var window_settings = Gtk.Settings.get_default ();
+            var user_settings = new GLib.Settings ("io.elementary.code.saved-state");
+            var dark = user_settings.get_int ("dark");
 
+            if (dark == 1) {
+                window_settings.set ("gtk-application-prefer-dark-theme", true);
+            }
+            else {
+                window_settings.set ("gtk-application-prefer-dark-theme", false);
+            }
             // Show/Hide widgets
             show_all ();
 
@@ -630,6 +641,19 @@ namespace Scratch {
         // Ctrl + scroll
         public void action_zoom_out () {
             zooming (Gdk.ScrollDirection.DOWN);
+        }
+
+        public void action_theme () {
+            var window_settings = Gtk.Settings.get_default ();
+            var user_settings = new GLib.Settings ("io.elementary.code.saved-state");
+            var dark = user_settings.get_int ("dark");
+            if (dark == 1) {
+                window_settings.set ("gtk-application-prefer-dark-theme", false);
+                user_settings.set_int ("dark", 0);
+            } else {
+                window_settings.set ("gtk-application-prefer-dark-theme", true);
+                user_settings.set_int ("dark", 1);
+            }
         }
 
         private void zooming (Gdk.ScrollDirection direction) {

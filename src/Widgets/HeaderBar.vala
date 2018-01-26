@@ -80,6 +80,10 @@ namespace Scratch.Widgets {
             zoom_in_button.action_name = MainWindow.ACTION_PREFIX + MainWindow.ACTION_ZOOM_IN;
             zoom_in_button.tooltip_text = _("Zoom In");
 
+            var theme_button = new Gtk.Button.from_icon_name ("object-inverse");
+            theme_button.action_name = MainWindow.ACTION_PREFIX + MainWindow.ACTION_THEME;
+            theme_button.tooltip_text = _("Theme");
+
             var font_size_grid = new Gtk.Grid ();
             font_size_grid.column_homogeneous = true;
             font_size_grid.hexpand = true;
@@ -134,6 +138,7 @@ namespace Scratch.Widgets {
             pack_end (share_app_menu);
             pack_end (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
             pack_end (find_button);
+            pack_end (theme_button);
 
             show_all ();
 
